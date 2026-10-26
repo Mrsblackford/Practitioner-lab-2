@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Practitioner Lab – BTEC Drama</title>
+<style>
+:root{--bg:#faf7f2;--card:#fff;--ink:#1d1b20;--mute:#5d5966;--line:#ddd6ca;--acc:#b3261e;--stage:#1b1722;--ok:#1b7a3d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15131a;--card:#201d27;--ink:#f1edf6;--mute:#b2acbd;--line:#37323f;--acc:#ff8a80;--stage:#0c0a10;--ok:#6fdc8c}}
+:root[data-theme="dark"]{--bg:#15131a;--card:#201d27;--ink:#f1edf6;--mute:#b2acbd;--line:#37323f;--acc:#ff8a80;--stage:#0c0a10;--ok:#6fdc8c}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;line-height:1.5}
+.wrap{max-width:900px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:2rem;margin:0 0 4px;letter-spacing:.5px}
+.sub{color:var(--mute);margin:0 0 18px;font-family:system-ui,sans-serif;font-size:.95rem}
+.tabs,.pick{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+button{font:600 .95rem system-ui,sans-serif;min-height:44px;padding:8px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button[aria-pressed="true"],button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+@media (prefers-color-scheme:dark){button[aria-pressed="true"],button.on{color:#15131a}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+.stagewrap{background:var(--stage);border-radius:14px;overflow:hidden;position:relative}
+svg{display:block;width:100%;height:auto}
+.cap{position:absolute;left:12px;top:10px;right:12px;color:#fff;font:600 .9rem system-ui,sans-serif;text-shadow:0 1px 4px #000}
+.fig{transform-box:fill-box;transform-origin:center;transition:transform .8s}
+.fig.b{fill:#6ec1ff}.fig.a{fill:#ffc86e}
+.hide{opacity:0;transition:opacity .5s}.show{opacity:1}
+#light{transition:fill .6s,opacity .6s}
+#stage[data-m="stan"] .a{animation:breath 3s infinite}#stage[data-m="stan"] .b{animation:breath 3s infinite .6s}
+#stage[data-m="brecht"] .a{animation:fwd 3.5s infinite alternate}
+#stage[data-m="artaud"] .fig{animation:shake .18s infinite}
+#stage[data-m="artaud"] #rings{opacity:1;animation:ring 1.2s infinite}
+#stage[data-m="boal"] #spect{opacity:1;animation:swap 5s infinite}
+#stage[data-m="frantic"] #duet{animation:orb 4s linear infinite}
+#duet{transform-box:fill-box;transform-origin:center}
+@keyframes breath{50%{transform:scale(1.05)}}
+@keyframes fwd{to{transform:translateY(34px) scale(1.12)}}
+@keyframes shake{25%{transform:translate(3px,-2px) rotate(2deg)}75%{transform:translate(-3px,2px) rotate(-2deg)}}
+@keyframes ring{50%{opacity:.25}}
+@keyframes swap{0%,40%{transform:translate(0,40px)}60%,100%{transform:translate(-60px,-8px)}}
+@keyframes orb{to{transform:rotate(360deg)}}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+dl{margin:0}dt{font:700 .8rem system-ui,sans-serif;text-transform:uppercase;letter-spacing:1px;color:var(--acc);margin-top:10px}dd{margin:2px 0 0}
+.bar{font:.85rem system-ui,sans-serif;margin:8px 0}.bar i{display:block;height:10px;border-radius:5px;background:var(--line);overflow:hidden;margin-top:3px}.bar b{display:block;height:100%;background:var(--acc);transition:width .6s}
+.opt{display:block;width:100%;text-align:left;margin:8px 0}
+.opt.ok{border-color:var(--ok);background:var(--ok);color:#fff}.opt.no{border-color:var(--acc);opacity:.65}
+.fb{font:.95rem system-ui,sans-serif;margin:8px 0;min-height:1.4em}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Practitioner Lab</h1>
+<p class="sub">Same scene, five different theatres. Watch how each practitioner would stage it, then test yourself.</p>
+<div class="tabs" role="tablist">
+<button id="t1" aria-pressed="true">Explore</button>
+<button id="t2" aria-pressed="false">Quiz</button>
+</div>
+
+<section id="explore">
+<div class="card"><strong>The scene:</strong> a factory worker is told the factory is closing.</div>
+<div class="pick" id="pick" aria-label="Choose a practitioner"></div>
+<div class="stagewrap">
+<div class="cap" id="cap"></div>
+<svg id="stage" data-m="stan" viewBox="0 0 600 320" role="img" aria-label="Animated stage showing the scene staged in the chosen practitioner’s style">
+<rect width="600" height="320" fill="#241f2e"/>
+<rect id="light" width="600" height="280" fill="#ffb86b" opacity=".18"/>
+<rect y="250" width="600" height="30" fill="#3a3145"/>
+<g id="rings" class="hide" fill="none" stroke="#ff4d4d" stroke-width="3"><circle cx="300" cy="140" r="70"/><circle cx="300" cy="140" r="110"/><circle cx="300" cy="140" r="150"/></g>
+<g id="duet"><g class="fig a"><circle cx="250" cy="120" r="20"/><rect x="232" y="146" width="36" height="86" rx="14"/></g><g class="fig b"><circle cx="350" cy="120" r="20"/><rect x="332" y="146" width="36" height="86" rx="14"/></g></g>
+<g id="plac" class="hide"><rect x="215" y="30" width="170" height="44" rx="4" fill="#fff"/><text x="300" y="58" text-anchor="middle" font-family="system-ui" font-weight="800" font-size="18" fill="#111">FACTORY CLOSES</text></g>
+<g id="spect" class="hide"><circle cx="520" cy="110" r="20" fill="#7dffb0"/><rect x="502" y="136" width="36" height="86" rx="14" fill="#7dffb0"/><text x="520" y="100" text-anchor="middle" font-family="system-ui" font-size="12" font-weight="700" fill="#7dffb0" transform="translate(0,-40)">SPECT-ACTOR</text></g>
+<rect y="285" width="600" height="35" fill="#0c0a10"/><text x="300" y="308" text-anchor="middle" font-family="system-ui" font-size="13" letter-spacing="4" fill="#9a93a8">AUDIENCE</text>
+</svg>
+</div>
+<div class="grid">
+<div class="card"><h2 id="pname" style="margin:0 0 4px"></h2><p id="ptag" style="margin:0;color:var(--mute)"></p><dl id="pdl"></dl></div>
+<div class="card"><strong>Style profile</strong><div id="bars"></div><p class="sub" style="margin-top:12px">Tip: in your evaluation, name a technique, say how you used it, then explain its effect on the audience.</p></div>
+</div>
+</section>
+
+<section id="quiz" hidden>
+<div class="card"><div class="sub" id="qn"></div><h2 id="qq" style="margin:4px 0 8px"></h2><div id="qo"></div><div class="fb" id="fb" aria-live="polite"></div><button id="next" hidden>Next</button></div>
+</section>
+</div>
+<script>
+var P={
+stan:{n:"Konstantin Stanislavski",tag:"Naturalism – believe it, live it",m:"stan",c:"#ffb86b",cap:"Quiet, truthful, fourth wall intact",d:[["Acting","Find the objective: ‘I need to keep my job.’ Use the magic if and emotion memory."],["Voice","Natural, conversational, with subtext under the lines."],["Space","Realistic set, actors in close, natural proximity."],["Light and sound","Warm, motivated lighting that feels like a real room."],["Exam tip","Name units, objectives and given circumstances."]],b:[95,15,10,35]},
+brecht:{n:"Bertolt Brecht",tag:"Epic theatre – think, don’t just feel",m:"brecht",c:"#ffffff",cap:"Placard, direct address, harsh white light",d:[["Acting","Show the character rather than become them. Use Gestus and narration."],["Voice","Speak to the audience, third person or stage directions aloud."],["Space","Bare stage, visible lights, placards and projections."],["Light and sound","Flat white light, never hidden, to stop emotional trance."],["Exam tip","Link alienation to the political or social message."]],b:[30,45,55,50]},
+artaud:{n:"Antonin Artaud",tag:"Theatre of Cruelty – shock the senses",m:"artaud",c:"#ff2a2a",cap:"Sound, red light, shaking bodies",d:[["Acting","Raw, ritual and physical. Cry and scream rather than explain."],["Voice","Non-verbal sound, chants, distorted and repeated words."],["Space","Surround the audience; remove the barrier of the stage."],["Light and sound","Intense colour, loud overwhelming soundscape."],["Exam tip","Explain how sensory overload affects the audience."]],b:[75,95,45,95]},
+boal:{n:"Augusto Boal",tag:"Theatre of the Oppressed – the audience acts",m:"boal",c:"#7dffb0",cap:"Freeze! A spect-actor steps in",d:[["Acting","Play the oppressor and the oppressed; replay the scene with changes."],["Voice","Clear, issue-focused, built to provoke debate."],["Space","Audience and stage are one. Spect-actors can enter."],["Light and sound","Simple and open; the focus is on the discussion."],["Exam tip","Describe forum theatre and the role of the Joker."]],b:[50,30,100,45]},
+frantic:{n:"Frantic Assembly",tag:"Physical theatre – movement tells the story",m:"frantic",c:"#6ea8ff",cap:"Chair duet: trust, lifts, momentum",d:[["Acting","Build movement from contact. Use Chair Duets and Round-By-Through."],["Voice","Minimal text; breath and rhythm drive the energy."],["Space","Open floor, props like chairs as partners."],["Light and sound","Pulsing light and driving music to match the choreography."],["Exam tip","Show how you devised the sequence and the trust involved."]],b:[60,60,35,100]}};
+var L=["Emotional realism","Abstraction","Audience involvement","Physicality"],cur="stan";
+var $=function(i){return document.getElementById(i)};
+function show(k){cur=k;var p=P[k];$("stage").setAttribute("data-m",p.m);$("light").setAttribute("fill",p.c);
+$("plac").setAttribute("class",k==="brecht"?"show":"hide");$("rings").setAttribute("class",k==="artaud"?"show":"hide");$("spect").setAttribute("class",k==="boal"?"show":"hide");
+$("cap").textContent=p.cap;$("pname").textContent=p.n;$("ptag").textContent=p.tag;
+$("pdl").innerHTML=p.d.map(function(x){return"<dt>"+x[0]+"</dt><dd>"+x[1]+"</dd>"}).join("");
+$("bars").innerHTML=L.map(function(l,i){return'<div class="bar">'+l+'<i><b style="width:'+p.b[i]+'%"></b></i></div>'}).join("");
+Array.prototype.forEach.call($("pick").children,function(b){b.setAttribute("aria-pressed",b.dataset.k===k)})}
+Object.keys(P).forEach(function(k){var b=document.createElement("button");b.textContent=P[k].n.split(" ").slice(-1)[0]==="Assembly"?"Frantic Assembly":P[k].n.split(" ").slice(-1)[0];b.dataset.k=k;b.onclick=function(){show(k)};$("pick").appendChild(b)});
+show("stan");
+function tab(q){$("explore").hidden=q;$("quiz").hidden=!q;$("t1").setAttribute("aria-pressed",!q);$("t2").setAttribute("aria-pressed",q);if(q&&!qs.started)startQ()}
+$("t1").onclick=function(){tab(false)};$("t2").onclick=function(){tab(true)};
+var Q=[
+["A group builds a piece using Chair Duets and physical lifts. Who inspired it?","frantic"],
+["An actor steps out of the story to speak to the audience, with a placard behind them. Who?","brecht"],
+["Audience members are invited to stop the action and replace an actor. Who?","boal"],
+["A performance uses overwhelming sound and light to shock the audience’s senses. Who?","artaud"],
+["Actors search for their ‘objective’ and use the ‘magic if’. Who?","stan"],
+["Which practitioner is most associated with Gestus and the alienation effect?","brecht"],
+["Which practitioner created ‘spect-actors’ and forum theatre?","boal"],
+["Who wrote about the ‘Theatre of Cruelty’?","artaud"]];
+var qs={i:0,s:0,started:false,done:false};
+function startQ(){qs={i:0,s:0,started:true,done:false};ask()}
+function ask(){var q=Q[qs.i];$("qn").textContent="Question "+(qs.i+1)+" of "+Q.length+" · Score "+qs.s;$("qq").textContent=q[0];$("fb").textContent="";$("next").hidden=true;
+$("qo").innerHTML="";Object.keys(P).forEach(function(k){var b=document.createElement("button");b.className="opt";b.textContent=P[k].n;b.onclick=function(){pick(k,b)};$("qo").appendChild(b)})}
+function pick(k,b){if(qs.done)return;qs.done=true;var q=Q[qs.i];Array.prototype.forEach.call($("qo").children,function(x){x.disabled=true;if(x.textContent===P[q[1]].n)x.classList.add("ok")});
+if(k===q[1]){qs.s++;$("fb").textContent="Correct! "+P[k].tag+"."}else{b.classList.add("no");$("fb").textContent="Not quite. The answer is "+P[q[1]].n+": "+P[q[1]].tag+"."}
+$("next").hidden=false;$("next").textContent=qs.i===Q.length-1?"See score":"Next"}
+$("next").onclick=function(){if(qs.i===Q.length-1){var pc=Math.round(qs.s/Q.length*100);$("qn").textContent="Finished";$("qq").textContent="You scored "+qs.s+" of "+Q.length+" ("+pc+"%)";$("qo").innerHTML="";$("fb").textContent=pc>=75?"Strong knowledge. Now practise linking each technique to its effect on an audience.":"Revisit the Explore tab and try again.";$("next").textContent="Try again";$("next").onclick=function(){$("next").onclick=nextQ;startQ()};return}nextQ()};
+function nextQ(){qs.i++;qs.done=false;ask()}
+$("next").onclick=function(){if(qs.i===Q.length-1&&qs.done&&$("qo").children.length){fin()}else nextQ()};
+function fin(){var pc=Math.round(qs.s/Q.length*100);$("qn").textContent="Finished";$("qq").textContent="You scored "+qs.s+" of "+Q.length+" ("+pc+"%)";$("qo").innerHTML="";$("fb").textContent=pc>=75?"Strong knowledge. Now practise linking each technique to its effect on an audience.":"Revisit the Explore tab and try again.";$("next").textContent="Try again";$("next").onclick=function(){$("next").onclick=function(){if(qs.i===Q.length-1&&qs.done&&$("qo").children.length)fin();else nextQ()};startQ()}}
+</script>
+</body>
+</html>
